@@ -39,7 +39,8 @@
     "src/app/profile/page.jsx",
     "src/app/layout.jsx",
     "src/app/profile/[id]/page.jsx",
-    "src/app/page.jsx"
+    "src/app/page.jsx",
+    "src/dbConfig/dbConfig.js"
   ],
   "exclude": ["node_modules"]
 }
