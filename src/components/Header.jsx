@@ -5,7 +5,7 @@ import { logout } from "../store/methods/authMethod";
 import { reset } from "../store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Home as HomeIcon, CloudUpload } from "lucide-react"; // Importing Home icon
 
 function Header() {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ function Header() {
       dispatch(reset());
       router.push("/profile");
     }
-  });
+  }, [dispatch, success, router]);
 
   return (
     <header className="bg-white shadow-md">
@@ -41,12 +41,28 @@ function Header() {
             {isAuthenticated ? (
               <>
                 <Link
+                  href="/"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <HomeIcon size={18} /> {/* Updated Home icon */}
+                  Home
+                </Link>
+                <Link
+                  href="/upload"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <CloudUpload size={18} /> {/* Updated Home icon */}
+                  Upload
+                </Link>
+
+                <Link
                   href="/profile"
                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   <User size={18} />
                   Profile
                 </Link>
+
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
