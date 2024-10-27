@@ -2,10 +2,10 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { logout } from "../store/methods/authMethod";
-import { reset } from "../store/slices/authSlice";
+import { reset, emptyLocalStorage } from "../store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { LogOut, User, Home as HomeIcon, CloudUpload } from "lucide-react"; // Importing Home icon
+import { LogOut, User, Home as HomeIcon, CloudUpload } from "lucide-react";
 
 function Header() {
   const dispatch = useDispatch();

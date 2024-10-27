@@ -22,10 +22,10 @@ export const getPosts = createAsyncThunk("/api/posts/get-posts", async () => {
 });
 
 export const getSpecificUserPosts = createAsyncThunk(
-  "/api/posts/upload",
+  "/api/posts/get-user-specific-posts",
   async () => {
     try {
-      const response = await axios.get(`/api/posts/upload`);
+      const response = await axios.get(`/api/posts/get-user-specific-posts`);
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -33,3 +33,13 @@ export const getSpecificUserPosts = createAsyncThunk(
     }
   }
 );
+
+export const likePost = createAsyncThunk("/api/posts/like", async (data) => {
+  try {
+    const response = await axios.post("/api/posts/like", data);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+});

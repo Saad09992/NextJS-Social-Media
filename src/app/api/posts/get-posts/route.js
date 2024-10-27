@@ -6,7 +6,8 @@ connectDB();
 
 export async function GET(request) {
   try {
-    const posts = await Post.find();
+    // Use populate to get full user details in likes array
+    const posts = await Post.find().populate("user");
     return NextResponse.json({ data: posts, success: true });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
