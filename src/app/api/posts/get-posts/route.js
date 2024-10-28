@@ -10,6 +10,6 @@ export async function GET(request) {
     const posts = await Post.find().populate("user");
     return NextResponse.json({ data: posts, success: true });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ error: error.message });
   }
 }

@@ -29,7 +29,7 @@ const post = createSlice({
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         state.data = action.payload.data;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
         state.success = action.payload.success;
       })
       .addCase(getPosts.rejected, (state, action) => {
@@ -38,7 +38,7 @@ const post = createSlice({
         state.success = action.payload.success;
       })
       .addCase(likePost.fulfilled, (state, action) => {
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
         state.success = action.payload.success;
       })
       .addCase(likePost.rejected, (state, action) => {

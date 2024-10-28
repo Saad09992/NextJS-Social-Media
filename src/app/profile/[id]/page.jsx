@@ -1,22 +1,21 @@
 "use client";
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../../store/methods/authMethod";
-import { setIsAuthenticated } from "../../store/slices/authSlice";
+import { getUserData } from "@/store/methods/authMethod";
+import { useRouter } from "next/navigation";
 
-function Profile() {
-  const dispatch = useDispatch();
+function PublicProfile({ params }) {
+  const { id } = React.use(params);
   const router = useRouter();
-  const { data } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
+  const { data, uid } = useSelector((state) => state.auth);
   useEffect(() => {
-    dispatch(getUserData());
-  }, []);
-
-  const handleEditProfile = () => {
-    router.push(`/profile/${data?._id}`);
-  };
+    dispatch(getUserData(id)).then((action) => {
+      if (action.payload) {
+        router.push(`/profile/${id}`);
+      }
+    });
+  }, [id, dispatch, router]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -49,27 +48,6 @@ function Profile() {
                 </p>
               </div>
             </div>
-
-            <button
-              onClick={handleEditProfile}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                />
-              </svg>
-              Edit Profile
-            </button>
           </div>
         </div>
 
@@ -122,4 +100,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default PublicProfile;

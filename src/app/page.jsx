@@ -3,29 +3,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPosts, likePost } from "../store/methods/postMethod";
 import { useEffect } from "react";
 import { Heart } from "lucide-react";
+import { getUserData } from "@/store/methods/authMethod";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { data } = useSelector((state) => state.post);
-  // const { data: userData } = useSelector((state) => state.auth);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const { uid } = useSelector((state) => state.auth);
 
   const handleLike = (postId) => {
-    try {
-      dispatch(likePost({ postId }));
-      dispatch(getPosts());
-    } catch (error) {
-      console.error("Error handling like:", error);
+    if (uid) {
+      try {
+        dispatch(likePost({ postId }));
+        dispatch(getPosts());
+      } catch (error) {
+        console.error("Error handling like:", error);
+      }
+    } else {
+      router.push("/login");
     }
   };
   const getPostsUsername = (post) => {
     if (!post.user) return "Anonymous User";
     return post.user.username;
   };
-  // Updated helper function to check likes array containing user objects
+  const getPostsId = (post) => {
+    return post.user._id;
+  };
   const hasUserLikedPost = (post) => {
-    if (!userData || !userData._id || !post.likes) return false;
-    return post.likes.some((likeUser) => likeUser === userData._id);
+    if (uid) {
+      if (!uid || !post.likes) return false;
+      return post.likes.some((likeUser) => likeUser === uid);
+    } else {
+      return false;
+    }
   };
   useEffect(() => {
     dispatch(getPosts());
@@ -35,12 +47,11 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100">
       <div className="flex flex-col items-center p-4 sm:p-8 pt-20 gap-6">
         <div className="w-full max-w-xl space-y-6">
-          {data.map((post) => (
+          {data?.map((post) => (
             <div
               key={post._id}
               className="bg-white shadow-lg rounded-lg overflow-hidden w-full transition-transform hover:shadow-xl"
             >
-              {/* User Info Header */}
               <div className="flex items-center p-4 border-b">
                 <div className="h-10 w-10 rounded-full bg-gray-200 overflow-hidden">
                   <img
@@ -51,7 +62,7 @@ export default function Home() {
                 </div>
                 <div className="ml-3 flex-grow">
                   <a
-                    href={`/profile/${getPostsUsername(post)}`}
+                    href={`/profile/${getPostsId(post)}`}
                     className="font-semibold text-blue-600 hover:underline"
                   >
                     {getPostsUsername(post) || "Anonymous User"}
@@ -61,8 +72,6 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-
-              {/* Post Image */}
               <div className="relative aspect-video">
                 <img
                   src={`/${post.image.replace(/^\.\/public\//, "")}`}
@@ -70,8 +79,6 @@ export default function Home() {
                   className="w-full h-full object-cover"
                 />
               </div>
-
-              {/* Interaction Bar */}
               <div className="px-4 py-2 border-b">
                 <button
                   onClick={() => handleLike(post._id)}
@@ -92,18 +99,9 @@ export default function Home() {
                   </span>
                 </button>
               </div>
-
-              {/* Post Content */}
               <div className="p-4">
                 <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
                 <p className="text-gray-700">{post.description}</p>
-              </div>
-
-              {/* Comments Preview */}
-              <div className="px-4 pb-4">
-                <div className="text-sm text-gray-500 hover:text-blue-600 cursor-pointer">
-                  View all comments
-                </div>
               </div>
             </div>
           ))}

@@ -5,22 +5,29 @@ export function middleware(request) {
   const searchParams = request.nextUrl.searchParams;
   const verifyToken = searchParams.get("token");
 
-  // Check if it's a verification path with token
+  const isPublicProfile = /^\/profile\/[^/]+$/.test(path);
+
   const isVerificationPath = path === "/verify" && verifyToken;
 
   const isPublic =
-    path === "/login" || path === "/signup" || isVerificationPath; // Allow verify path with token
+    path === "/login" ||
+    path === "/signup" ||
+    isVerificationPath ||
+    path === "/" ||
+    isPublicProfile;
 
   const token = request.cookies.get("token")?.value || "";
 
-  // Allow verification path with token parameter regardless of cookie
   if (isVerificationPath) {
     return NextResponse.next();
   }
 
-  // Regular auth flow
-  if (isPublic && token) {
-    return NextResponse.redirect(new URL("/profile", request.url));
+  // if (isPublic && token) {
+  //   return NextResponse.redirect(new URL("/profile", request.url));
+  // }
+
+  if (path === "/profile" && !token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (!isPublic && !token) {
@@ -31,5 +38,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/signup", "/verify", "/profile"],
+  matcher: ["/", "/login", "/signup", "/verify", "/profile", "/profile/:path*"],
 };

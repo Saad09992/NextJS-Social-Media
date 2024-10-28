@@ -23,7 +23,7 @@ export default function ToastManager() {
     if (postError) {
       toast.error(postError);
     }
-  }, [message, error]);
+  }, [message, error, postMessage, postError]);
 
   return null;
 }

@@ -3,24 +3,21 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 connectDB();
 
-export async function POST(request: NextRequest) {
+export async function POST(request) {
   try {
     const reqBody = await request.json();
-    console.log(reqBody);
     const { token } = await reqBody;
-    console.log(token);
     const user = await User.findOne({
-      verifyToken: token,
-      verifyTokenExpirey: { $gt: new Date() },
+      emailVerificationToken: token,
+      emailVerificationExpires: { $gt: new Date() },
     });
     if (!user) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid OR expired token" });
     }
-    console.log(user);
 
     user.isVerified = true;
-    user.verifyToken = undefined;
-    user.verifyTokenExpirey = undefined;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpires = undefined;
 
     await user.save();
 
@@ -28,7 +25,7 @@ export async function POST(request: NextRequest) {
       message: "User verified successfully",
       success: true,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ error: error.message });
   }
 }

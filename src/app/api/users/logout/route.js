@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 connectDB();
 
-export async function GET(request: NextRequest) {
+export async function GET(request) {
   try {
     const response = NextResponse.json({
       message: "Logout Successfully",
@@ -12,12 +12,9 @@ export async function GET(request: NextRequest) {
     response.cookies.delete("token");
 
     return response;
-  } catch (error: any) {
-    return NextResponse.json(
-      {
-        error: error.message,
-      },
-      { status: 500 }
-    );
+  } catch (error) {
+    return NextResponse.json({
+      error: error.message,
+    });
   }
 }

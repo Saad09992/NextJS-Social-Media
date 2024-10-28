@@ -26,6 +26,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.jsx",
+    "**/*.js",
     ".next/types/**/*.ts",
     "src/models/userModel.js",
     "src/store/store.js",
@@ -38,9 +40,10 @@
     "src/app/login/page.jsx",
     "src/app/profile/page.jsx",
     "src/app/layout.jsx",
-    "src/app/profile/[id]/page.jsx",
+    "src/app/profile/[id]/[id].jsx/page.jsx",
     "src/app/page.jsx",
-    "src/dbConfig/dbConfig.js"
+    "src/dbConfig/dbConfig.js",
+    "src/app/api/users/signup/route.js"
   ],
   "exclude": ["node_modules"]
 }

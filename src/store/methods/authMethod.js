@@ -21,15 +21,18 @@ export const login = createAsyncThunk("/api/users/login", async (data) => {
   }
 });
 
-export const verify = createAsyncThunk("/api/users/verify", async (token) => {
-  try {
-    const response = await axios.post("/api/users/verify", { token });
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    console.log(error);
+export const verifyToken = createAsyncThunk(
+  "/api/users/verify",
+  async (token) => {
+    try {
+      const response = await axios.post("/api/users/verify", { token });
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const logout = createAsyncThunk("/api/users/logout", async () => {
   try {
@@ -40,11 +43,14 @@ export const logout = createAsyncThunk("/api/users/logout", async () => {
   }
 });
 
-export const getUserData = createAsyncThunk("/api/users/me", async () => {
-  try {
-    const response = await axios.get("/api/users/me");
-    return response.data;
-  } catch (error) {
-    console.log(error);
+export const getUserData = createAsyncThunk(
+  "/api/users/get-user-data",
+  async (uid) => {
+    try {
+      const response = await axios.post("/api/users/get-user-data", { uid });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);

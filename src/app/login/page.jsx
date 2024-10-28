@@ -8,7 +8,7 @@ import { reset } from "../../store/slices/authSlice";
 
 function Login() {
   const dispatch = useDispatch();
-  const { success, data } = useSelector((state) => state.auth);
+  const { success, uid } = useSelector((state) => state.auth);
 
   const router = useRouter();
   const [user, setUser] = useState({
@@ -26,7 +26,7 @@ function Login() {
   useEffect(() => {
     if (success) {
       dispatch(reset());
-      router.push("/profile");
+      router.push(`/profile/${uid}`);
     }
   });
 

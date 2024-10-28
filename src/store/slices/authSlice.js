@@ -3,23 +3,23 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   signUp,
   login,
-  verify,
   logout,
   getUserData,
+  verifyToken,
 } from "../methods/authMethod";
 
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
     data: {},
-    message: "",
-    success: false,
-    error: "",
-    isAuthenticated: localStorage.getItem("isauthenticated") || false,
+    uid: localStorage.getItem("uid") || null,
+    message: null,
+    success: null,
+    error: null,
+    isAuthenticated: !!localStorage.getItem("token"),
   },
   reducers: {
     reset: (state) => {
-      state.data = [];
       state.message = "";
       state.success = false;
       state.error = "";
@@ -28,7 +28,6 @@ export const authSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(signUp.fulfilled, (state, action) => {
-        state.data = action.payload.data;
         state.message = action.payload.message;
         state.success = action.payload.success;
       })
@@ -38,34 +37,38 @@ export const authSlice = createSlice({
         state.success = action.payload.success;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.data = action.payload.data;
+        state.uid = action.payload.uid;
         state.message = action.payload.message;
         state.success = action.payload.success;
-        state.isAuthenticated = true;
-        localStorage.setItem("isauthenticated", true);
+        state.token = action.payload.token;
+        state.uid = action.payload.uid;
+        state.isAuthenticated = action.payload.token != null;
+        if (action.payload.token != null) {
+          localStorage.setItem("token", action.payload.token);
+          localStorage.setItem("uid", action.payload.uid);
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.payload.error;
         state.message = action.payload.message;
         state.success = action.payload.success;
       })
-      .addCase(verify.fulfilled, (state, action) => {
-        state.data = action.payload.data;
+      .addCase(verifyToken.fulfilled, (state, action) => {
         state.message = action.payload.message;
         state.success = action.payload.success;
+        localStorage.removeItem("verification-token");
       })
-      .addCase(verify.rejected, (state, action) => {
+      .addCase(verifyToken.rejected, (state, action) => {
         state.error = action.payload.error;
         state.message = action.payload.message;
         state.success = action.payload.success;
       })
       .addCase(logout.fulfilled, (state, action) => {
-        state.data = action.payload.data;
         state.message = action.payload.message;
         state.success = action.payload.success;
         state.isAuthenticated = false;
-        localStorage.removeItem("isauthenticated");
-        localStorage.removeItem("userData");
+        localStorage.removeItem("token");
+        localStorage.removeItem("uid");
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.payload.error;
@@ -73,14 +76,14 @@ export const authSlice = createSlice({
         state.success = action.payload.success;
       })
       .addCase(getUserData.fulfilled, (state, action) => {
-        state.data = action.payload.data || {};
-        state.message = action.payload.message;
+        console.log(action.payload);
+        state.data = action.payload.data;
+        // state.message = action.payload.message;
         state.success = action.payload.success;
-        localStorage.setItem("userData", JSON.stringify(action.payload.data));
       })
       .addCase(getUserData.rejected, (state, action) => {
         state.error = action.payload.error;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
         state.success = action.payload.success;
       });
   },
