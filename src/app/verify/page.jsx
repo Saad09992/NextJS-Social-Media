@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { verify } from "../../store/methods/authMethod";
+// import { verify } from "../../store/methods/authMethod";
 import { reset } from "@/store/slices/authSlice";
 
 function Verify() {
@@ -12,7 +12,7 @@ function Verify() {
   const [token, setToken] = useState("");
   const handleVerification = async () => {
     try {
-      dispatch(verify(token));
+      // dispatch(verify(token));
     } catch (error) {
       console.log(error);
     }

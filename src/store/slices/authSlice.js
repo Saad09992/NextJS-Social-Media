@@ -8,15 +8,23 @@ import {
   verifyToken,
 } from "../methods/authMethod";
 
+// Helper function to safely access localStorage
+const getLocalStorageItem = (key) => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem(key);
+  }
+  return null; // Return null if not in the client environment
+};
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
     data: {},
-    uid: localStorage.getItem("uid") || null,
+    uid: getLocalStorageItem("uid"),
     message: null,
     success: null,
     error: null,
-    isAuthenticated: !!localStorage.getItem("token"),
+    isAuthenticated: !!getLocalStorageItem("token"),
   },
   reducers: {
     reset: (state) => {
@@ -41,9 +49,9 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
         state.success = action.payload.success;
         state.token = action.payload.token;
-        state.uid = action.payload.uid;
         state.isAuthenticated = action.payload.token != null;
-        if (action.payload.token != null) {
+
+        if (typeof window !== "undefined" && action.payload.token != null) {
           localStorage.setItem("token", action.payload.token);
           localStorage.setItem("uid", action.payload.uid);
         }
@@ -56,7 +64,9 @@ export const authSlice = createSlice({
       .addCase(verifyToken.fulfilled, (state, action) => {
         state.message = action.payload.message;
         state.success = action.payload.success;
-        localStorage.removeItem("verification-token");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("verification-token");
+        }
       })
       .addCase(verifyToken.rejected, (state, action) => {
         state.error = action.payload.error;
@@ -67,8 +77,10 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
         state.success = action.payload.success;
         state.isAuthenticated = false;
-        localStorage.removeItem("token");
-        localStorage.removeItem("uid");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          localStorage.removeItem("uid");
+        }
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.payload.error;
@@ -77,17 +89,16 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.fulfilled, (state, action) => {
         state.data = action.payload.data;
-        // state.message = action.payload.message;
         state.success = action.payload.success;
       })
       .addCase(getUserData.rejected, (state, action) => {
         state.error = action.payload.error;
-        // state.message = action.payload.message;
         state.success = action.payload.success;
       });
   },
 });
+
 // Action creators are generated for each case reducer function
-export const { reset, setIsAuthenticated } = authSlice.actions;
+export const { reset } = authSlice.actions;
 
 export default authSlice.reducer;
