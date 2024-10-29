@@ -4,7 +4,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const signUp = createAsyncThunk("/api/users/signup", async (data) => {
   try {
-    console.log(data);
     const response = await axios.post("/api/users/signup", data);
     return response.data;
   } catch (error) {
@@ -26,7 +25,6 @@ export const verifyToken = createAsyncThunk(
   async (token) => {
     try {
       const response = await axios.post("/api/users/verify", { token });
-      console.log(response);
       return response.data;
     } catch (error) {
       console.log(error);

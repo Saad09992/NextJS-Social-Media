@@ -36,7 +36,6 @@ export async function POST(request) {
       expiresIn: "1d",
     });
     await User.updateOne({ _id: user._id }, { token: token });
-    console.log(token);
 
     const response = NextResponse.json({
       message: "Logged in successfully",

@@ -11,7 +11,6 @@ export async function POST(request) {
     const { uid } = reqBody;
     const userData = await User.findOne({ _id: uid }).select("-password");
 
-    console.log(userData);
     if (!userData) {
       return NextResponse.json({
         error: "Error fetching user data",

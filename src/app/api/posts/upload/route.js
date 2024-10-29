@@ -9,8 +9,8 @@ connectDB();
 
 export async function POST(request) {
   try {
-    const userId = getDataFromToken(request);
     const reqBody = await request.formData();
+    const userId = reqBody.get("userId");
     const image = reqBody.get("image");
     const title = reqBody.get("title");
     const description = reqBody.get("description");

@@ -1,21 +1,45 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "@/store/methods/authMethod";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 function PublicProfile({ params }) {
-  const { id } = React.use(params);
   const router = useRouter();
+  const { id } = React.use(params);
   const dispatch = useDispatch();
-  const { data, uid } = useSelector((state) => state.auth);
+  const { data } = useSelector((state) => state.auth);
+
+  const [formData, setFormData] = useState({
+    username: "",
+    phone: "",
+    location: "",
+    bio: "",
+    avatar: null,
+  });
+
+  useEffect(() => {
+    if (data) {
+      const avatar = data.avatar?.replace(/^\.\/public(?=\/)/, "") || null;
+
+      setFormData({
+        username: data.username || "",
+        phone: data.phoneNumber || "",
+        location: data.location || "",
+        bio: data.bio || "",
+        avatar: avatar || null,
+      });
+    }
+  }, [data]);
+
   useEffect(() => {
     dispatch(getUserData(id)).then((action) => {
       if (action.payload) {
-        router.push(`/profile/${id}`);
+        router.push(`/public-profile/${id}`);
       }
     });
-  }, [id, dispatch, router]);
+  }, [id, dispatch]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -23,29 +47,38 @@ function PublicProfile({ params }) {
         <div className="p-6 border-b">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="h-20 w-20 bg-gray-200 rounded-full flex items-center justify-center">
-                <svg
-                  className="h-12 w-12 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              <div className="relative h-20 w-20 rounded-full">
+                {formData.avatar ? (
+                  <Image
+                    src={formData.avatar}
+                    alt="Profile"
+                    layout="fill"
+                    className="rounded-full object-cover"
                   />
-                </svg>
+                ) : (
+                  <div className="h-full w-full bg-gray-200 rounded-full flex items-center justify-center">
+                    <svg
+                      className="h-12 w-12 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                  </div>
+                )}
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
                   {data?.username || "User Name"}
                 </h1>
-                <p className="text-gray-600">
-                  {data?.email || "email@example.com"}
-                </p>
+                <p className="text-gray-600">{data?.email}</p>
               </div>
             </div>
           </div>
@@ -61,7 +94,7 @@ function PublicProfile({ params }) {
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500">Phone</p>
                   <p className="text-gray-900">
-                    {data?.phone || "Not provided"}
+                    {data?.phoneNumber || "Not provided"}
                   </p>
                 </div>
                 <div className="space-y-2">
@@ -73,7 +106,7 @@ function PublicProfile({ params }) {
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500">Member Since</p>
                   <p className="text-gray-900">
-                    {data?.joinedDate || "Not provided"}
+                    {data?.dateJoined || "Not provided"}
                   </p>
                 </div>
                 <div className="space-y-2">

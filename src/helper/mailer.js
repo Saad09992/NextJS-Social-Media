@@ -2,14 +2,19 @@ import nodemailer from "nodemailer";
 
 export const sendMail = async ({ email, verificationToken }) => {
   try {
-    console.log(verificationToken);
-    // Looking to send emails in production? Check out our Email API/SMTP product!
+    console.log(process.env.EMAIL);
+    console.log(process.env.PASS);
+
     var transport = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
+      host: "smtp.gmail.com",
+      port: 587, // or 465 for SSL
+      secure: false, // true for 465, false for other ports
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PASS,
+      },
+      tls: {
+        rejectUnauthorized: false, // Ignore self-signed certificates
       },
     });
     const verificationTokenURL = `${process.env.DOMAIN}/verify/${verificationToken}`;

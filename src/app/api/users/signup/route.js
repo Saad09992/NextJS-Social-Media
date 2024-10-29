@@ -34,8 +34,6 @@ export async function POST(request) {
       });
 
       const savedUser = await addUser.save();
-      console.log(savedUser);
-      console.log(emailVerificationToken);
       await sendMail({ email, verificationToken: emailVerificationToken });
 
       return NextResponse.json({
@@ -45,7 +43,6 @@ export async function POST(request) {
       });
     }
   } catch (error) {
-    console.log("error");
     return NextResponse.json({ error: error.message });
   }
 }
@@ -66,7 +63,6 @@ export async function POST(request) {
 
 //     const newUser = new User({ username, password: hashedPassword, email });
 //     const savedUser = await newUser.save();
-//     console.log(savedUser);
 //     // Verification Email
 
 //     await sendMail({ email, emailType: "VERIFY", userId: savedUser._id });

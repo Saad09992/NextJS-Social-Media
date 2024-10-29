@@ -14,9 +14,29 @@ const userSchema = new mongoose.Schema({
     required: [true, "Email is required"],
     unique: true,
   },
+  phoneNumber: {
+    type: Number,
+    default: null,
+  },
+  location: {
+    type: String,
+    default: null,
+  },
+  bio: {
+    type: String,
+    default: null,
+  },
+  avatar: {
+    type: String,
+    default: null,
+  },
   isVerified: {
     type: Boolean,
     default: false,
+  },
+  dateJoined: {
+    type: Date,
+    default: Date.now(),
   },
   token: {
     type: String,

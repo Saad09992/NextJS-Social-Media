@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/methods/authMethod";
@@ -26,7 +25,7 @@ function Login() {
   useEffect(() => {
     if (success) {
       dispatch(reset());
-      router.push(`/profile/${uid}`);
+      router.push(`/profile`);
     }
   });
 

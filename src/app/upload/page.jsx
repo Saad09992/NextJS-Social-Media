@@ -10,6 +10,7 @@ export default function UploadForm() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const { loading, success } = useSelector((state) => state.post);
+  const { uid } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -20,7 +21,9 @@ export default function UploadForm() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("image", image);
+      formData.append("userId", uid);
       dispatch(upload(formData));
+      console.log(success);
       if (success) {
         router.push("/");
       }
