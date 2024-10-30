@@ -125,7 +125,7 @@ function Header() {
                   Upload
                 </Link>
                 <Link
-                  href={`/profile/${uid}`}
+                  href={`/profile`}
                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900  px-3 py-2 rounded-md text-sm font-medium"
                 >
                   <User size={18} />
