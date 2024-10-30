@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     default: null,
   },
   location: {

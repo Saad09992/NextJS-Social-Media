@@ -25,7 +25,7 @@ function Profile() {
 
   useEffect(() => {
     if (data) {
-      const avatar = data.avatar?.replace(/^\.\/public(?=\/)/, "") || null;
+      const avatar = data?.avatar || null;
       setFormData({
         userId: uid,
         username: data.username || "",

@@ -47,16 +47,15 @@ function PublicProfile({ params }) {
         <div className="p-6 border-b">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="relative h-20 w-20 rounded-full">
+              <div className="relative h-20 w-20 rounded-full overflow-hidden">
                 {formData.avatar ? (
-                  <Image
+                  <img
                     src={formData.avatar}
                     alt="Profile"
-                    layout="fill"
-                    className="rounded-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="h-full w-full bg-gray-200 rounded-full flex items-center justify-center">
+                  <div className="h-full w-full bg-gray-200 flex items-center justify-center">
                     <svg
                       className="h-12 w-12 text-gray-400"
                       fill="none"

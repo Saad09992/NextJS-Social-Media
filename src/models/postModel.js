@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import User from "./userModel";
 
 const postSchema = new mongoose.Schema(
   {

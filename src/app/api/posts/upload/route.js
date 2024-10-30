@@ -1,9 +1,7 @@
 import Post from "@/models/postModel";
-import path from "path";
-import { writeFile } from "fs/promises";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/dbConfig/dbConfig";
-import { getDataFromToken } from "@/helper/TokenExtract";
+import { put } from "@vercel/blob";
 
 connectDB();
 
@@ -14,16 +12,25 @@ export async function POST(request) {
     const image = reqBody.get("image");
     const title = reqBody.get("title");
     const description = reqBody.get("description");
+
     const byteLength = await image.arrayBuffer();
-    const bufferData = await Buffer.from(byteLength);
+    const bufferData = Buffer.from(byteLength);
+
     const date = new Date().getMilliseconds();
-    const pathofIMG = `./public/uploads/${date}${path.extname(image.name)}`;
-    writeFile(pathofIMG, bufferData);
+    const blobPath = `uploads/${date}-${image.name}`;
+    const blobResponse = await put(blobPath, bufferData, {
+      access: "public",
+      contentType: image.type,
+    });
+
+    if (!blobResponse || !blobResponse.url) {
+      throw new Error("Failed to upload image to Vercel Blob");
+    }
 
     const newPost = new Post({
       title: title,
       description: description,
-      image: pathofIMG,
+      image: blobResponse.url,
       user: userId,
     });
 

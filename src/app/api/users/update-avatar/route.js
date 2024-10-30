@@ -3,6 +3,7 @@ import path from "path";
 import { writeFile } from "fs/promises";
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 
 connectDB();
 
@@ -14,11 +15,15 @@ export async function POST(request) {
     const byteLength = await image.arrayBuffer();
     const bufferData = await Buffer.from(byteLength);
     const date = new Date().getMilliseconds();
-    const pathofIMG = `./public/profile_pics/${date}${path.extname(
-      image.name
-    )}`;
-    writeFile(pathofIMG, bufferData);
-
+    const blobPath = `profile_pics/${date}${path.extname(image.name)}`;
+    const blobResponse = await put(blobPath, bufferData, {
+      access: "public",
+      contentType: image.type,
+    });
+    // writeFile(pathofIMG, bufferData);
+    if (!blobResponse || !blobResponse.url) {
+      throw new Error("Failed to upload image to Vercel Blob");
+    }
     const getUser = await User.findById(userId);
 
     if (!getUser) {
@@ -28,7 +33,7 @@ export async function POST(request) {
       });
     }
 
-    getUser.avatar = pathofIMG;
+    getUser.avatar = blobResponse.url;
 
     await getUser.save();
 
