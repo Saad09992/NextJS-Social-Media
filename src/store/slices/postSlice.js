@@ -3,8 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   upload,
   getPosts,
-  getSpecificUserPosts,
   likePost,
+  deletePost,
+  getSpecificPost,
 } from "@/store/methods/postMethod";
 
 const postSlice = createSlice({
@@ -51,15 +52,24 @@ const postSlice = createSlice({
         state.error = action.payload.error;
         state.success = action.payload.sucess;
       })
-      .addCase(getSpecificUserPosts.fulfilled, (state, action) => {
+
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.error = action.payload.error;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(getSpecificPost.fulfilled, (state, action) => {
         state.data = action.payload.data;
         state.message = action.payload.message;
         state.success = action.payload.success;
       })
-      .addCase(getSpecificUserPosts.rejected, (state, action) => {
+      .addCase(getSpecificPost.rejected, (state, action) => {
         state.error = action.payload.error;
         state.message = action.payload.message;
-        state.success = action.payload.success;
       });
   },
 });

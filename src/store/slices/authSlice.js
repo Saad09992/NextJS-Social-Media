@@ -89,6 +89,7 @@ export const authSlice = createSlice({
       })
       .addCase(getUserData.fulfilled, (state, action) => {
         state.data = action.payload.data;
+        console.log(action.payload.data);
         state.success = action.payload.success;
       })
       .addCase(getUserData.rejected, (state, action) => {

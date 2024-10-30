@@ -18,19 +18,6 @@ export const getPosts = createAsyncThunk("/api/posts/get-posts", async () => {
     console.log(error);
   }
 });
-
-export const getSpecificUserPosts = createAsyncThunk(
-  "/api/posts/get-user-specific-posts",
-  async () => {
-    try {
-      const response = await axios.get(`/api/posts/get-user-specific-posts`);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
-
 export const likePost = createAsyncThunk("/api/posts/like", async (data) => {
   try {
     const response = await axios.post("/api/posts/like", data);
@@ -39,3 +26,40 @@ export const likePost = createAsyncThunk("/api/posts/like", async (data) => {
     console.log(error);
   }
 });
+
+export const deletePost = createAsyncThunk(
+  "/api/posts/del-post",
+  async (data) => {
+    try {
+      const response = await axios.post("/api/posts/del-post", data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getSpecificPost = createAsyncThunk(
+  "/api/posts/get-specific-post",
+  async (data) => {
+    try {
+      console.log(data);
+      const response = await axios.post("/api/posts/get-specific-post", data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const editPost = createAsyncThunk(
+  "/api/posts/edit-post",
+  async (data) => {
+    try {
+      const response = await axios.post("/api/posts/edit-post", data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);

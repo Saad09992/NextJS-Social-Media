@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "@/store/methods/authMethod";
 import { updateAvatar, updateUserData } from "@/store/methods/profileMethod";
+import { deletePost } from "@/store/methods/postMethod";
 import { useRouter } from "next/navigation";
 import { reset } from "@/store/slices/authSlice";
 import { PencilIcon } from "lucide-react";
@@ -11,7 +12,9 @@ function Profile() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { data, uid, success } = useSelector((state) => state.auth);
-
+  const [posts, setPosts] = useState(0);
+  const [postsData, setPostsData] = useState([]);
+  const [likes, setLikes] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [formData, setFormData] = useState({
@@ -96,6 +99,38 @@ function Profile() {
     }
   };
 
+  const handlePostEdit = (postId) => {
+    router.push(`/edit/${postId}`);
+  };
+
+  const handlePostDelete = (postId) => {
+    dispatch(deletePost({ postId: postId, uid: uid })).then((action) => {
+      if (action.payload.data) {
+        dispatch(getUserData(uid)).then((action) => {
+          if (action.payload) {
+            router.push(`/profile`);
+            dispatch(reset());
+          }
+        });
+      }
+    });
+    dispatch(reset());
+    console.log(postId);
+  };
+
+  useEffect(() => {
+    const posts = data?.userPosts;
+    setPostsData(posts);
+    const allPosts = posts?.length || 0;
+    setPosts(allPosts);
+
+    let totalLikes = 0;
+    for (let i = 0; i < posts?.length; i++) {
+      totalLikes += posts[i]?.likes?.length || 0;
+    }
+    setLikes(totalLikes);
+  }, [data]);
+
   useEffect(() => {
     dispatch(getUserData(uid)).then((action) => {
       if (action.payload) {
@@ -118,6 +153,7 @@ function Profile() {
       });
     }
   }, [data]);
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow">
@@ -168,14 +204,22 @@ function Profile() {
                     placeholder="Enter username"
                   />
                 ) : (
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {data?.username || "User Name"}
-                  </h1>
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-2xl font-bold text-gray-900">
+                      {data?.username || "User Name"}
+                    </h1>
+                  </div>
                 )}
                 <p className="text-gray-600">{data?.email}</p>
               </div>
             </div>
-            <div>
+            <div className="flex items-center gap-4">
+              <div className="bg-gray-200 px-4 py-3 rounded-md text-lg font-medium">
+                {posts} Posts
+              </div>
+              <div className="bg-gray-200 px-4 py-3 rounded-md text-lg font-medium">
+                {likes} Likes
+              </div>
               {isEditing ? (
                 <div className="space-x-2">
                   <button
@@ -283,11 +327,47 @@ function Profile() {
           </div>
         </div>
       </div>
+      <div className="p-6">
+        <div className="p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            User Posts
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {postsData?.map((post, index) => (
+              <div key={index} className="border p-4 rounded-lg bg-gray-100">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="h-40 w-full object-cover rounded-md mb-2"
+                />
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {post.title}
+                  </h3>
+                  <div className="flex space-x-2">
+                    <button
+                      className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                      onClick={() => handlePostEdit(post._id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                      onClick={() => handlePostDelete(post._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       <input
         type="file"
         id="avatarInput"
-        accept="image/*"
-        className="hidden"
+        style={{ display: "none" }}
         onChange={handleAvatarChange}
       />
     </div>
