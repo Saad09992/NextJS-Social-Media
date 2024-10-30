@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { logout } from "../store/methods/authMethod";
-import { reset, emptyLocalStorage } from "../store/slices/authSlice";
+import { reset } from "../store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
@@ -31,8 +31,8 @@ function Header() {
 
   useEffect(() => {
     if (success) {
-      dispatch(reset());
       router.push(`/`);
+      dispatch(reset());
     }
   }, [dispatch, success, router]);
 

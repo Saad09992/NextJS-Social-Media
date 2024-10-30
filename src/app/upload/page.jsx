@@ -54,8 +54,8 @@ export default function UploadForm() {
 
   useEffect(() => {
     if (success) {
-      dispatch(reset());
       router.push("/");
+      dispatch(reset());
     }
   });
 

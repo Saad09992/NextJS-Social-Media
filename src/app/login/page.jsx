@@ -24,8 +24,8 @@ function Login() {
   };
   useEffect(() => {
     if (success) {
-      dispatch(reset());
       router.push(`/profile`);
+      dispatch(reset());
     }
   });
 

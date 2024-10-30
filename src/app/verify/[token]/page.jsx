@@ -19,8 +19,8 @@ function VerifyToken({ params }) {
   };
   useEffect(() => {
     if (success) {
-      dispatch(reset());
       router.push(`/login`);
+      dispatch(reset());
     }
   });
   return (

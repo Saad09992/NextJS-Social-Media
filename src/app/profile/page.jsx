@@ -51,8 +51,8 @@ function Profile() {
         await dispatch(updateAvatar(formData));
         dispatch(getUserData(uid)).then((action) => {
           if (action.payload) {
-            dispatch(reset());
             router.push(`/profile`);
+            dispatch(reset());
           }
         });
       } catch (error) {
@@ -82,8 +82,8 @@ function Profile() {
         if (action.payload) {
           dispatch(getUserData(uid)).then((action) => {
             if (action.payload) {
-              dispatch(reset());
               router.push(`/profile`);
+              dispatch(reset());
             }
           });
         }
@@ -99,8 +99,8 @@ function Profile() {
   useEffect(() => {
     dispatch(getUserData(uid)).then((action) => {
       if (action.payload) {
-        dispatch(reset());
         router.push(`/profile`);
+        dispatch(reset());
       }
     });
   }, [uid, dispatch, router]);

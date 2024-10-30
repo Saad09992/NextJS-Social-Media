@@ -37,8 +37,8 @@ function PublicProfile({ params }) {
   useEffect(() => {
     dispatch(getUserData(id)).then((action) => {
       if (action.payload) {
-        dispatch(reset());
         router.push(`/public-profile/${id}`);
+        dispatch(reset());
       }
     });
   }, [id, dispatch]);

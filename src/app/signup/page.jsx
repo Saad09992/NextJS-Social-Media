@@ -26,8 +26,8 @@ function SignUp() {
   };
   useEffect(() => {
     if (success) {
-      dispatch(reset());
       router.push("/login");
+      dispatch(reset());
     }
   });
   useEffect(() => {

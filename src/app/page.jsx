@@ -4,7 +4,7 @@ import { getPosts, likePost } from "../store/methods/postMethod";
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { reset } from "@/store/slices/authSlice";
+import { reset } from "@/store/slices/postSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -71,6 +71,10 @@ export default function Home() {
     if (!uid || !post.likes) return false;
     return post.likes.includes(uid);
   };
+
+  useEffect(() => {
+    dispatch(reset());
+  });
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex flex-col items-center p-4 sm:p-8 pt-20 gap-6">

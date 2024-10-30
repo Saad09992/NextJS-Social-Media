@@ -7,7 +7,7 @@ import {
   likePost,
 } from "@/store/methods/postMethod";
 
-const post = createSlice({
+const postSlice = createSlice({
   name: "post",
   initialState: {
     data: [],
@@ -64,4 +64,5 @@ const post = createSlice({
   },
 });
 
-export default post.reducer;
+export const { reset } = postSlice.actions;
+export default postSlice.reducer;
