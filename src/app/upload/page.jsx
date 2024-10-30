@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { upload } from "../../store/methods/postMethod";
+import { reset } from "@/store/slices/authSlice";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -23,10 +24,6 @@ export default function UploadForm() {
       formData.append("image", image);
       formData.append("userId", uid);
       dispatch(upload(formData));
-      console.log(success);
-      if (success) {
-        router.push("/");
-      }
     } catch (error) {
       console.log(error);
     }
@@ -54,6 +51,13 @@ export default function UploadForm() {
   const handleClick = () => {
     document.getElementById("imageInput").click();
   };
+
+  useEffect(() => {
+    if (success) {
+      dispatch(reset());
+      router.push("/");
+    }
+  });
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
