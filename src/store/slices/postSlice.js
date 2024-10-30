@@ -12,15 +12,15 @@ const postSlice = createSlice({
   name: "post",
   initialState: {
     data: [],
-    message: "",
+    message: null,
     error: null,
     success: false,
   },
   reducers: {
     reset: (state) => {
-      state.message = "";
+      state.message = null;
       state.success = false;
-      state.error = "";
+      state.error = null;
     },
   },
   extraReducers: (builder) => {

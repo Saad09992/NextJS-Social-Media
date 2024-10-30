@@ -14,22 +14,22 @@ export default function ToastManager() {
   );
 
   useEffect(() => {
-    if (success) {
+    if (success && message != "") {
       toast.success(message);
-    } else {
+    } else if (!success && message != "") {
       toast.error(message);
     }
-    if (postSuccess) {
+    if (postSuccess && postMessage != "") {
       toast.success(postMessage);
-    } else {
+    } else if (!postSuccess && postMessage != "") {
       toast.error(postMessage);
     }
-    if (profileSuccess) {
+    if (profileSuccess && profileMessage != "") {
       toast.success(profileMessage);
-    } else {
+    } else if (!profileSuccess && profileMessage != "") {
       toast.error(profileMessage);
     }
-  }, [message, error, postMessage, postError]);
+  }, [success, postSuccess, profileSuccess]);
 
   return null;
 }
