@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../../store/methods/authMethod";
+import { reset } from "@/store/slices/authSlice";
 
 function SignUp() {
   const router = useRouter();
@@ -25,6 +26,7 @@ function SignUp() {
   };
   useEffect(() => {
     if (success) {
+      dispatch(reset());
       router.push("/login");
     }
   });

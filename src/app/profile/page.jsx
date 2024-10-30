@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "@/store/methods/authMethod";
 import { updateAvatar, updateUserData } from "@/store/methods/profileMethod";
 import { useRouter } from "next/navigation";
+import { reset } from "@/store/slices/authSlice";
 import { PencilIcon } from "lucide-react";
 
 function Profile() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data, uid } = useSelector((state) => state.auth);
+  const { data, uid, success } = useSelector((state) => state.auth);
 
   const [isEditing, setIsEditing] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -22,28 +23,6 @@ function Profile() {
     avatar: null,
   });
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (data) {
-      const avatar = data?.avatar || null;
-      setFormData({
-        userId: uid,
-        username: data.username || "",
-        phone: data.phoneNumber || "",
-        location: data.location || "",
-        bio: data.bio || "",
-        avatar: avatar || null,
-      });
-    }
-  }, [data]);
-
-  useEffect(() => {
-    dispatch(getUserData(uid)).then((action) => {
-      if (action.payload) {
-        router.push(`/profile`);
-      }
-    });
-  }, [uid, dispatch, router]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,6 +51,7 @@ function Profile() {
         await dispatch(updateAvatar(formData));
         dispatch(getUserData(uid)).then((action) => {
           if (action.payload) {
+            dispatch(reset());
             router.push(`/profile`);
           }
         });
@@ -102,6 +82,7 @@ function Profile() {
         if (action.payload) {
           dispatch(getUserData(uid)).then((action) => {
             if (action.payload) {
+              dispatch(reset());
               router.push(`/profile`);
             }
           });
@@ -115,6 +96,28 @@ function Profile() {
     }
   };
 
+  useEffect(() => {
+    dispatch(getUserData(uid)).then((action) => {
+      if (action.payload) {
+        dispatch(reset());
+        router.push(`/profile`);
+      }
+    });
+  }, [uid, dispatch, router]);
+
+  useEffect(() => {
+    if (data) {
+      const avatar = data?.avatar || null;
+      setFormData({
+        userId: uid,
+        username: data.username || "",
+        phone: data.phoneNumber || "",
+        location: data.location || "",
+        bio: data.bio || "",
+        avatar: avatar || null,
+      });
+    }
+  }, [data]);
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow">

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { upload } from "../../store/methods/postMethod";
-import { reset } from "@/store/slices/authSlice";
+import { reset } from "@/store/slices/postSlice";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 

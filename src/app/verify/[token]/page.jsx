@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyToken } from "@/store/methods/authMethod";
 import { useRouter } from "next/navigation";
+import { reset } from "@/store/slices/authSlice";
 
 function VerifyToken({ params }) {
   const { token } = React.use(params);
@@ -18,6 +19,7 @@ function VerifyToken({ params }) {
   };
   useEffect(() => {
     if (success) {
+      dispatch(reset());
       router.push(`/login`);
     }
   });

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "@/store/methods/authMethod";
 import Image from "next/image";
+import { reset } from "@/store/slices/authSlice";
 import { useRouter } from "next/navigation";
 
 function PublicProfile({ params }) {
@@ -36,6 +37,7 @@ function PublicProfile({ params }) {
   useEffect(() => {
     dispatch(getUserData(id)).then((action) => {
       if (action.payload) {
+        dispatch(reset());
         router.push(`/public-profile/${id}`);
       }
     });

@@ -15,7 +15,13 @@ const post = createSlice({
     error: null,
     success: false,
   },
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.message = "";
+      state.success = false;
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(upload.fulfilled, (state, action) => {

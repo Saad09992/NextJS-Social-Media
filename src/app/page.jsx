@@ -4,12 +4,13 @@ import { getPosts, likePost } from "../store/methods/postMethod";
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { reset } from "@/store/slices/authSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { data } = useSelector((state) => state.post);
-  const { uid } = useSelector((state) => state.auth);
+  const { uid, success } = useSelector((state) => state.auth);
   const [localPosts, setLocalPosts] = useState([]);
 
   useEffect(() => {
