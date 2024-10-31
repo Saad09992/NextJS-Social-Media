@@ -23,7 +23,15 @@ export default function UploadForm() {
       formData.append("description", description);
       formData.append("image", image);
       formData.append("userId", uid);
-      dispatch(upload(formData));
+      dispatch(upload(formData)).then((action) => {
+        if (action.payload.success) {
+          setTitle("");
+          setDescription("");
+          setImage(null);
+          dispatch(reset());
+          router.push("/");
+        }
+      });
     } catch (error) {
       console.log(error);
     }
@@ -51,13 +59,6 @@ export default function UploadForm() {
   const handleClick = () => {
     document.getElementById("imageInput").click();
   };
-
-  useEffect(() => {
-    if (success) {
-      router.push("/");
-      dispatch(reset());
-    }
-  });
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
