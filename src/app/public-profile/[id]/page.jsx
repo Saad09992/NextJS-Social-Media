@@ -151,32 +151,54 @@ function PublicProfile({ params }) {
           </div>
         </div>
       </div>
-      <div className="p-6">
-        <div className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            User Posts
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {postsData?.map((post, index) => (
-              <div
-                key={index}
-                className="border rounded-lg bg-gray-100 overflow-hidden"
-              >
-                <div className="aspect-w-16 aspect-h-9 relative">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-800">
-                    {post.title}
-                  </h3>
+
+      <div className="max-w-7xl mx-auto mt-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 px-6">My Posts</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          {postsData?.map((post, index) => (
+            <div
+              key={index}
+              className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col"
+            >
+              {/* Image container with hover effect */}
+              <div className="relative aspect-square bg-gray-100">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Hover overlay with gradient and actions */}
+              </div>
+
+              {/* Post details */}
+              <div className="p-4 flex flex-col flex-grow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-1">
+                  {post.title}
+                </h3>
+
+                {/* Additional post info */}
+                <div className="mt-auto flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                      />
+                    </svg>
+                    <span>{post.likes?.length || 0} likes</span>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
