@@ -100,7 +100,7 @@ function Profile() {
   };
 
   const handlePostEdit = (postId) => {
-    router.push(`/edit/${postId}`);
+    router.push(`/edit-post/${postId}`);
   };
 
   const handlePostDelete = (postId) => {
@@ -334,11 +334,11 @@ function Profile() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {postsData?.map((post, index) => (
-              <div key={index} className="border p-4 rounded-lg bg-gray-100">
+              <div key={index} className="aspect-w-16 aspect-h-9 relative">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="h-40 w-full object-cover rounded-md mb-2"
+                  className="w-full h-full object-contain"
                 />
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-gray-800">

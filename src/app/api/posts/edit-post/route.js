@@ -8,10 +8,9 @@ connectDB();
 export async function POST(request) {
   try {
     const reqBody = await request.formData();
-    const userId = reqBody.get("userId");
     const image = reqBody.get("image");
     const title = reqBody.get("title");
-    const id = reqBody.get("id");
+    const postId = reqBody.get("postId");
     const description = reqBody.get("description");
 
     const byteLength = await image.arrayBuffer();
@@ -28,14 +27,19 @@ export async function POST(request) {
       throw new Error("Failed to upload image to Vercel Blob");
     }
 
-    const newPost = new Post({
-      title: title,
-      description: description,
-      image: blobResponse.url,
-      user: userId,
-    });
+    const updatePost = await Post.findById(postId);
+    if (!updatePost) {
+      return NextResponse.json(
+        { error: "Post not found", success: false },
+        { status: 404 }
+      );
+    }
 
-    const res = await newPost.save();
+    updatePost.title = title;
+    updatePost.description = description;
+    updatePost.image = blobResponse.url;
+
+    const res = await updatePost.save();
     if (res) {
       return NextResponse.json({
         message: "Post Edited successfully",

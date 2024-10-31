@@ -40,11 +40,11 @@ export const deletePost = createAsyncThunk(
 );
 
 export const getSpecificPost = createAsyncThunk(
-  "/api/posts/get-specific-post",
+  "/api/posts/get-specific",
   async (data) => {
     try {
       console.log(data);
-      const response = await axios.post("/api/posts/get-specific-post", data);
+      const response = await axios.get(`/api/posts/get-specific-post/${data}`);
       return response.data;
     } catch (error) {
       console.log(error);

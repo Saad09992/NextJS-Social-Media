@@ -11,7 +11,9 @@ function PublicProfile({ params }) {
   const { id } = React.use(params);
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.auth);
-
+  const [likes, setLikes] = useState(0);
+  const [posts, setPosts] = useState(0);
+  const [postsData, setPostsData] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
     phone: "",
@@ -42,6 +44,19 @@ function PublicProfile({ params }) {
       }
     });
   }, [id, dispatch]);
+
+  useEffect(() => {
+    const posts = data?.userPosts;
+    setPostsData(posts);
+    const allPosts = posts?.length || 0;
+    setPosts(allPosts);
+
+    let totalLikes = 0;
+    for (let i = 0; i < posts?.length; i++) {
+      totalLikes += posts[i]?.likes?.length || 0;
+    }
+    setLikes(totalLikes);
+  }, [data]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -80,6 +95,12 @@ function PublicProfile({ params }) {
                   {data?.username || "User Name"}
                 </h1>
                 <p className="text-gray-600">{data?.email}</p>
+              </div>
+              <div className="bg-gray-200 px-4 py-3 rounded-md text-lg font-medium">
+                {posts} Posts
+              </div>
+              <div className="bg-gray-200 px-4 py-3 rounded-md text-lg font-medium">
+                {likes} Likes
               </div>
             </div>
           </div>
@@ -127,6 +148,34 @@ function PublicProfile({ params }) {
                 {data?.bio || "No bio information provided."}
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="p-6">
+        <div className="p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            User Posts
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {postsData?.map((post, index) => (
+              <div
+                key={index}
+                className="border rounded-lg bg-gray-100 overflow-hidden"
+              >
+                <div className="aspect-w-16 aspect-h-9 relative">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {post.title}
+                  </h3>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

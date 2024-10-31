@@ -6,6 +6,7 @@ import {
   likePost,
   deletePost,
   getSpecificPost,
+  editPost,
 } from "@/store/methods/postMethod";
 
 const postSlice = createSlice({
@@ -70,6 +71,17 @@ const postSlice = createSlice({
       .addCase(getSpecificPost.rejected, (state, action) => {
         state.error = action.payload.error;
         state.message = action.payload.message;
+      })
+      .addCase(editPost.fulfilled, (state, action) => {
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+
+        state.data = action.payload.data;
+      })
+      .addCase(editPost.rejected, (state, action) => {
+        state.error = action.payload.error;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
       });
   },
 });

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { reset } from "@/store/slices/postSlice";
+import { reset as postReset } from "@/store/slices/authSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getPosts());
+    dispatch(reset());
   }, [dispatch]);
 
   const handleLike = async (postId) => {
@@ -71,10 +73,6 @@ export default function Home() {
     if (!uid || !post.likes) return false;
     return post.likes.includes(uid);
   };
-
-  useEffect(() => {
-    dispatch(reset());
-  });
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex flex-col items-center p-4 sm:p-8 pt-20 gap-6">
@@ -86,7 +84,7 @@ export default function Home() {
                 className="bg-white shadow-lg rounded-lg overflow-hidden w-full transition-transform hover:shadow-xl"
               >
                 <div className="flex items-center p-4 border-b">
-                  <div className="h-10 w-10 rounded-full bg-gray-200 overflow-hidden">
+                  <div className="h-10 w-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
                     {post.user?.avatar ? (
                       <img
                         src={post.user?.avatar}
@@ -96,7 +94,7 @@ export default function Home() {
                     ) : (
                       <div className="h-full w-full bg-gray-200 flex items-center justify-center">
                         <svg
-                          className="h-10 w-19 text-gray-400"
+                          className="h-6 w-6 text-gray-400"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -124,12 +122,14 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <div className="relative aspect-video">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="relative w-full">
+                  <div className="aspect-w-16 aspect-h-9">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
                 <div className="px-4 py-2 border-b">
                   <button
